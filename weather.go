@@ -74,7 +74,7 @@ func CurrentWeather(location, key string) (Weather, error) {
 
 	if isZip {
 		country := "us"
-		zip := 94040
+		zip := "94040"
 
 		forgein, err := regexp.MatchString("/[A-Za-z]{2}+/", location)
 		if forgein {
@@ -95,7 +95,7 @@ func CurrentWeather(location, key string) (Weather, error) {
 		for i := 0; i < len(parts); i++ {
 			zipFound, _ := regexp.MatchString("\\d{5}(?:[-\\s]\\d{4})?", parts[i])
 			if zipFound {
-				country = parts[i]
+				zip = parts[i]
 				break
 			}
 		}
@@ -117,7 +117,7 @@ func CurrentWeather(location, key string) (Weather, error) {
 
 		err = json.Unmarshal(body, &w)
 
-		fmt.Println(string(body), "\n", url)
+		//fmt.Println(string(body), "\n", url)
 
 		return w, nil
 
