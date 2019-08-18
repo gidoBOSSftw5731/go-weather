@@ -53,7 +53,7 @@ type Weather struct {
 	} `json:"sys"`
 	ID   int    `json:"id"`
 	Name string `json:"name"`
-	Cod  int    `json:"cod"`
+	Cod  string `json:"cod"`
 }
 
 //CurrentWeather returns a struct with weather data.
