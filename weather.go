@@ -1,0 +1,119 @@
+package weather
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"regexp"
+	"strings"
+)
+
+const (
+	endpoint = "api.openweathermap.org/data/2.5/weather?zip=%v,%v&appid=%v"
+)
+
+//Weather is a struct that contains json information of weather for a specified location
+type Weather struct {
+	Coord struct {
+		Lon float64 `json:"lon"`
+		Lat float64 `json:"lat"`
+	} `json:"coord"`
+	Weather []struct {
+		ID          int    `json:"id"`
+		Main        string `json:"main"`
+		Description string `json:"description"`
+		Icon        string `json:"icon"`
+	} `json:"weather"`
+	Base string `json:"base"`
+	Main struct {
+		Temp     float64 `json:"temp"`
+		Pressure int     `json:"pressure"`
+		Humidity int     `json:"humidity"`
+		TempMin  float64 `json:"temp_min"`
+		TempMax  float64 `json:"temp_max"`
+	} `json:"main"`
+	Visibility int `json:"visibility"`
+	Wind       struct {
+		Speed float64 `json:"speed"`
+		Deg   int     `json:"deg"`
+		Gust  float64 `json:"gust"`
+	} `json:"wind"`
+	Clouds struct {
+		All int `json:"all"`
+	} `json:"clouds"`
+	Dt  int `json:"dt"`
+	Sys struct {
+		Type    int     `json:"type"`
+		ID      int     `json:"id"`
+		Message float64 `json:"message"`
+		Country string  `json:"country"`
+		Sunrise int     `json:"sunrise"`
+		Sunset  int     `json:"sunset"`
+	} `json:"sys"`
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+	Cod  int    `json:"cod"`
+}
+
+//CurrentWeather returns a struct with weather data.
+func CurrentWeather(location, key string) (Weather, error) {
+	var w Weather
+
+	isZip, err := regexp.MatchString("\\d{5}(?:[-\\s]\\d{4})?", location)
+	if err != nil {
+		return w, err
+	}
+
+	if isZip {
+		country := "us"
+		zip := 94040
+
+		forgein, err := regexp.MatchString("/[A-Za-z]{2}+/", location)
+		if forgein {
+			parts := strings.Split(location, " ")
+			if len(parts) == 1 {
+				return w, fmt.Errorf("No space between the country code and zip")
+			}
+			for i := 0; i < len(parts); i++ {
+				isCountry, _ := regexp.MatchString("/^[A-Za-z]{2}+$/", parts[i])
+				if isCountry {
+					country = parts[i]
+					break
+				}
+			}
+		}
+
+		parts := strings.Split(location, " ")
+		for i := 0; i < len(parts); i++ {
+			zipFound, _ := regexp.MatchString("\\d{5}(?:[-\\s]\\d{4})?", parts[i])
+			if zipFound {
+				country = parts[i]
+				break
+			}
+		}
+
+		url := fmt.Sprintf(endpoint, zip, country, key)
+
+		req, err := http.Get(url)
+		if err != nil {
+			return w, err
+		}
+		defer req.Body.Close()
+
+		body, err := ioutil.ReadAll(req.Body)
+		if err != nil {
+			return w, err
+		}
+
+		err = json.Unmarshal(body, &w)
+
+		return w, err
+
+	} else {
+		return w, fmt.Errorf("Improper Format!")
+	}
+
+	return w, nil
+
+}
