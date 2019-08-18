@@ -53,7 +53,7 @@ type Weather struct {
 	} `json:"sys"`
 	ID   int    `json:"id"`
 	Name string `json:"name"`
-	Cod  string `json:"cod"`
+	Cod  int    `json:"cod"`
 }
 
 func keyRemover(err error, key string) error {
