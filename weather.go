@@ -36,8 +36,7 @@ type Weather struct {
 	Visibility int `json:"visibility"`
 	Wind       struct {
 		Speed float64 `json:"speed"`
-		Deg   int     `json:"deg"`
-		Gust  float64 `json:"gust"`
+		Deg   float64 `json:"deg"`
 	} `json:"wind"`
 	Clouds struct {
 		All int `json:"all"`
@@ -51,9 +50,10 @@ type Weather struct {
 		Sunrise int     `json:"sunrise"`
 		Sunset  int     `json:"sunset"`
 	} `json:"sys"`
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	Cod  int    `json:"cod"`
+	Timezone int    `json:"timezone"`
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	Cod      int    `json:"cod"`
 }
 
 func keyRemover(err error, key string) error {
