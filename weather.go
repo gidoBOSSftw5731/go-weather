@@ -57,7 +57,7 @@ type Weather struct {
 }
 
 func keyRemover(err error, key string) error {
-	stringErr := strings.Replace(fmt.Sprint(err), key, "$$$KEY$$$", -1)
+	stringErr := strings.Replace(fmt.Sprint(err), key, "${KEY}", -1)
 
 	return fmt.Errorf(stringErr)
 }
@@ -117,8 +117,7 @@ func CurrentWeather(location, key string) (Weather, error) {
 
 		err = json.Unmarshal(body, &w)
 
-		err = keyRemover(err, key)
-		return w, err
+		return w, nil
 
 	} else {
 		return w, fmt.Errorf("Improper Format!")
