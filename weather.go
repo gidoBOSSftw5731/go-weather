@@ -60,6 +60,8 @@ type Weather struct {
 func CurrentWeather(location, key string) (Weather, error) {
 	var w Weather
 
+	println(location)
+
 	isZip, err := regexp.MatchString("\\d{5}(?:[-\\s]\\d{4})?", location)
 	if err != nil {
 		return w, err
