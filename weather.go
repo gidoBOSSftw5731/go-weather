@@ -117,7 +117,7 @@ func CurrentWeather(location, key string) (Weather, error) {
 
 		err = json.Unmarshal(body, &w)
 
-		fmt.Println(body, "\n", w)
+		fmt.Println(string(body), "\n", w)
 
 		return w, nil
 
