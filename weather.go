@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	endpoint = "https://api.openweathermap.org/data/2.5/weather?zip=%v,%v&appid=%v"
+	endpoint = "https://api.openweathermap.org/data/2.5/weather?zip=%v,%v&appid=%v&units=metric"
 )
 
 //Weather is a struct that contains json information of weather for a specified location
