@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	endpoint = "api.openweathermap.org/data/2.5/weather?zip=%v,%v&appid=%v"
+	endpoint = "https://api.openweathermap.org/data/2.5/weather?zip=%v,%v&appid=%v"
 )
 
 //Weather is a struct that contains json information of weather for a specified location
@@ -59,8 +59,6 @@ type Weather struct {
 //CurrentWeather returns a struct with weather data.
 func CurrentWeather(location, key string) (Weather, error) {
 	var w Weather
-
-	println(location)
 
 	isZip, err := regexp.MatchString("\\d{5}(?:[-\\s]\\d{4})?", location)
 	if err != nil {
