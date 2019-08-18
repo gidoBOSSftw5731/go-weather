@@ -56,12 +56,19 @@ type Weather struct {
 	Cod  string `json:"cod"`
 }
 
+func keyRemover(err error, key string) error {
+	stringErr := strings.Replace(fmt.Sprint(err), key, "$$$KEY$$$", -1)
+
+	return fmt.Errorf(stringErr)
+}
+
 //CurrentWeather returns a struct with weather data.
 func CurrentWeather(location, key string) (Weather, error) {
 	var w Weather
 
 	isZip, err := regexp.MatchString("\\d{5}(?:[-\\s]\\d{4})?", location)
 	if err != nil {
+		err = keyRemover(err, key)
 		return w, err
 	}
 
@@ -97,17 +104,20 @@ func CurrentWeather(location, key string) (Weather, error) {
 
 		req, err := http.Get(url)
 		if err != nil {
+			err = keyRemover(err, key)
 			return w, err
 		}
 		defer req.Body.Close()
 
 		body, err := ioutil.ReadAll(req.Body)
 		if err != nil {
+			err = keyRemover(err, key)
 			return w, err
 		}
 
 		err = json.Unmarshal(body, &w)
 
+		err = keyRemover(err, key)
 		return w, err
 
 	} else {
