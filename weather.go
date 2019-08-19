@@ -66,14 +66,11 @@ func keyRemover(err error, key string) error {
 func CurrentWeather(location, key string) (Weather, error) {
 	var w Weather
 
-	println(location)
-
-	isZip, _ := regexp.MatchString("\\d{5}(?:[-s]\\d{4})?", location)
-	/*if err != nil {
+	isZip, err := regexp.MatchString("\\d{5}(?:[-\\s]\\d{4})?", location)
+	if err != nil {
 		err = keyRemover(err, key)
 		return w, err
 	}
-	error checking broke?*/
 
 	if isZip {
 		country := "us"
