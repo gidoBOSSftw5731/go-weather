@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	endpoint = "https://api.openweathermap.org/data/2.5/weather?zip=%v,%v&appid=%v&units=metric"
+	endpoint = "https://api.openweathermap.org/data/2.5/weather?%v=%v,%v&appid=%v&units=metric"
 )
 
 //Weather is a struct that contains json information of weather for a specified location
@@ -77,6 +77,11 @@ func CurrentWeather(location, key string) (Weather, error) {
 		zip := "94040"
 
 		forgein, err := regexp.MatchString("/[A-Za-z]{2}+/", location)
+		if err != nil {
+			err = keyRemover(err, key)
+			return w, err
+		}
+
 		if forgein {
 			parts := strings.Split(location, " ")
 			if len(parts) == 1 {
@@ -100,7 +105,51 @@ func CurrentWeather(location, key string) (Weather, error) {
 			}
 		}
 
-		url := fmt.Sprintf(endpoint, zip, country, key)
+		url := fmt.Sprintf(endpoint, "zip", zip, country, key)
+
+		req, err := http.Get(url)
+		if err != nil {
+			err = keyRemover(err, key)
+			return w, err
+		}
+		defer req.Body.Close()
+
+		body, err := ioutil.ReadAll(req.Body)
+		if err != nil {
+			err = keyRemover(err, key)
+			return w, err
+		}
+
+		err = json.Unmarshal(body, &w)
+
+		//fmt.Println(string(body), "\n", url)
+	} else {
+		country := "us"
+		var city string
+
+		forgein, err := regexp.MatchString("/[A-Za-z]{2}+/", location)
+		if err != nil {
+			err = keyRemover(err, key)
+			return w, err
+		}
+
+		if forgein {
+			parts := strings.Split(location, " ")
+			if len(parts) == 1 {
+				return w, fmt.Errorf("No space between the country code and zip")
+			}
+			for i := 0; i < len(parts); i++ {
+				isCountry, _ := regexp.MatchString("/^[A-Za-z]{2}+$/", parts[i])
+				if isCountry {
+					country = parts[i]
+					break
+				} else {
+					city += parts[i]
+				}
+			}
+		}
+
+		url := fmt.Sprintf(endpoint, "q", city, country, key)
 
 		req, err := http.Get(url)
 		if err != nil {
@@ -119,10 +168,6 @@ func CurrentWeather(location, key string) (Weather, error) {
 
 		//fmt.Println(string(body), "\n", url)
 
-		return w, nil
-
-	} else {
-		return w, fmt.Errorf("Improper Format!")
 	}
 
 	return w, nil
