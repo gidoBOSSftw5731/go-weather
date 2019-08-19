@@ -127,13 +127,13 @@ func CurrentWeather(location, key string) (Weather, error) {
 		country := "us"
 		var city string
 
+		println("foo")
+
 		forgein, err := regexp.MatchString("/[A-Za-z]{2}+/", location)
 		if err != nil {
 			err = keyRemover(err, key)
 			return w, err
 		}
-
-		println("foo")
 
 		if forgein {
 			parts := strings.Split(location, " ")
