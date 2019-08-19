@@ -133,6 +133,8 @@ func CurrentWeather(location, key string) (Weather, error) {
 			return w, err
 		}
 
+		println("foo")
+
 		if forgein {
 			parts := strings.Split(location, " ")
 			if len(parts) == 1 {
