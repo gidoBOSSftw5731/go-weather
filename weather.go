@@ -150,7 +150,7 @@ func CurrentWeather(location, key string) (Weather, error) {
 		}
 
 		url := fmt.Sprintf(endpoint, "q", city, country, key)
-		//println(url)
+		println(url)
 
 		req, err := http.Get(url)
 		if err != nil {
