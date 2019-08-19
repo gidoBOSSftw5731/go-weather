@@ -142,7 +142,6 @@ func CurrentWeather(location, key string) (Weather, error) {
 				isCountry, _ := regexp.MatchString("/^[A-Za-z]{2}$/", parts[i])
 				if isCountry {
 					country = parts[i]
-					break
 				} else {
 					city += parts[i]
 				}
