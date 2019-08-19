@@ -125,7 +125,7 @@ func CurrentWeather(location, key string) (Weather, error) {
 		//fmt.Println(string(body), "\n", url)
 	} else {
 		country := "us"
-		var city string
+		city := "Mountain View"
 
 		forgein, err := regexp.MatchString("/[A-Za-z]{2} /", location)
 		if err != nil {
