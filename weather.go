@@ -77,6 +77,11 @@ func CurrentWeather(location, key string) (Weather, error) {
 		zip := "94040"
 
 		forgein, err := regexp.MatchString("/[A-Za-z]{2}+/", location)
+		if err != nil {
+			err = keyRemover(err, key)
+			return w, err
+		}
+
 		if forgein {
 			parts := strings.Split(location, " ")
 			if len(parts) == 1 {
