@@ -88,7 +88,7 @@ func CurrentWeather(location, key string) (Weather, error) {
 				return w, fmt.Errorf("No space between the country code and zip")
 			}
 			for i := 0; i < len(parts); i++ {
-				isCountry, _ := regexp.MatchString("/^[A-Za-z]{2}+$/", parts[i])
+				isCountry, _ := regexp.MatchString("/^[A-Za-z]{2}$/", parts[i])
 				if isCountry {
 					country = parts[i]
 					break
@@ -139,7 +139,7 @@ func CurrentWeather(location, key string) (Weather, error) {
 				return w, fmt.Errorf("No space between the country code and zip")
 			}
 			for i := 0; i < len(parts); i++ {
-				isCountry, _ := regexp.MatchString("/^[A-Za-z]{2}+$/", parts[i])
+				isCountry, _ := regexp.MatchString("/^[A-Za-z]{2}$/", parts[i])
 				if isCountry {
 					country = parts[i]
 					break
@@ -150,7 +150,7 @@ func CurrentWeather(location, key string) (Weather, error) {
 		}
 
 		url := fmt.Sprintf(endpoint, "q", city, country, key)
-		println(url)
+		//println(url)
 
 		req, err := http.Get(url)
 		if err != nil {
