@@ -73,6 +73,7 @@ func CurrentWeather(location, key string) (Weather, error) {
 		err = keyRemover(err, key)
 		return w, err
 	}
+	println("foo")
 
 	if isZip {
 		country := "us"
