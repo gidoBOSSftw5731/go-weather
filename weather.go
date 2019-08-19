@@ -146,6 +146,8 @@ func CurrentWeather(location, key string) (Weather, error) {
 					city += parts[i]
 				}
 			}
+		} else {
+			city = location
 		}
 
 		url := fmt.Sprintf(endpoint, "q", city, country, key)
